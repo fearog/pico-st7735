@@ -37,6 +37,7 @@ include only the features you need. Currently, the library supports the followin
   - `TFT_ENABLE_BLACK`:   "black"-type TFT
   - `TFT_ENABLE_GREEN`:   "green"-type TFT
   - `TFT_ENABLE_RED`:     "red"-type TFT
+  - `TFT_ENABLE_MINI160x80`:	mini 160x80 TFT,  blue tab
   - `TFT_ENABLE_GENERIC`: "generic"-type TFT
   - `TFT_ENABLE_RESET`:   use reset-pin during initialization
   - `TFT_ENABLE_TEXT`:    enable text-functions

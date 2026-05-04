@@ -73,24 +73,35 @@ extern uint8_t tft_width, tft_height;
 #define ST7735_MADCTL_ML 0x10
 #define ST7735_MADCTL_RGB 0x00
 #define ST7735_VSCRSADD 0x37
+
+// Some register settings
+#define ST7735_MADCTL_BGR 0x08
+#define ST7735_MADCTL_MH 0x04
+
 #define ST7735_FRMCTR1 0xB1
 #define ST7735_FRMCTR2 0xB2
 #define ST7735_FRMCTR3 0xB3
 #define ST7735_INVCTR  0xB4
 #define ST7735_DISSET5 0xB6
+
 #define ST7735_PWCTR1  0xC0
 #define ST7735_PWCTR2  0xC1
 #define ST7735_PWCTR3  0xC2
 #define ST7735_PWCTR4  0xC3
 #define ST7735_PWCTR5  0xC4
 #define ST7735_VMCTR1  0xC5
+
+#define ST7735_PWCTR6 0xFC
+
+#define ST7735_GMCTRP1 0xE0
+#define ST7735_GMCTRN1 0xE1
+
 #define ST7735_RDID1   0xDA
 #define ST7735_RDID2   0xDB
 #define ST7735_RDID3   0xDC
 #define ST7735_RDID4   0xDD
 #define ST7735_PWCTR6  0xFC
-#define ST7735_GMCTRP1 0xE0
-#define ST7735_GMCTRN1 0xE1
+
 
 // Color definitions
 #define   ST7735_BLACK   0x0000
@@ -123,6 +134,11 @@ void TFT_RedTab_Initialize(void);
 
 #if defined TFT_ENABLE_BLACK
 void TFT_BlackTab_Initialize(void);
+void Rcmd2green160x80();
+#endif
+
+#if defined TFT_ENABLE_MINI160x80
+void TFT_Mini160x80_Initialize(void);
 #endif
 
 #if defined(TFT_ENABLE_RED) || defined(TFT_ENABLE_BLACK)
@@ -142,12 +158,12 @@ void Rcmd1();
 void Rcmd3();
 
 // Misc + Screen related
-void setAddrWindow(uint8_t , uint8_t , uint8_t , uint8_t );
+void setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
 void fillScreen(uint16_t color);
 void drawFastVLine(uint8_t x, uint8_t y, uint8_t h, uint16_t color);
 void drawFastHLine(uint8_t x, uint8_t y, uint8_t w, uint16_t color);
-void drawPixel(uint8_t , uint8_t , uint16_t );
-void fillRectangle(uint8_t , uint8_t , uint8_t , uint8_t , uint16_t );
+void drawPixel(uint8_t x, uint8_t y, uint16_t color);
+void fillRectangle(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color);
 void fillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color);
 
 void invertDisplay(bool i);

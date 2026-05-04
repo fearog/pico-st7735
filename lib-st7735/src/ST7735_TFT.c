@@ -30,6 +30,11 @@ uint8_t _colstart = 0, _rowstart = 0, _tft_type, _rotation = 0, _xstart = 0, _ys
 // we keept this public
 uint8_t tft_width = 128, tft_height = 160;
 
+// storing the original sizes
+uint8_t _screen_width = 128, _screen_height = 160;
+
+uint8_t _colorOrder = ST7735_MADCTL_RGB;
+
 // because of code compatibilty
 #define _width         tft_width
 #define _height        tft_height
@@ -175,6 +180,20 @@ void Rcmd2red(){
   write_data(0x00); write_data(0x9F);
 }
 #endif
+
+#if defined TFT_ENABLE_MINI160x80
+void Rcmd2green160x80(){
+  write_command(ST7735_INVON);
+  write_data(0x00);
+  write_command(ST7735_CASET);
+  write_data(0x00); write_data(0x00);
+  write_data(0x00); write_data(0x4F);
+  write_command(ST7735_RASET);
+  write_data(0x00); write_data(0x00);
+  write_data(0x00); write_data(0x9F);
+}
+#endif
+
 
 void Rcmd3(){
   write_command(ST7735_GMCTRP1);
@@ -681,6 +700,29 @@ void TFT_BlackTab_Initialize(){
 }
 #endif
 
+// Init Blue tab mini 160x80 version
+#if defined TFT_ENABLE_MINI160x80
+void TFT_Mini160x80_Initialize(){
+#if defined TFT_ENABLE_RESET
+  TFT_ResetPIN();
+#endif
+  tft_dc_low();
+  Rcmd1();
+  Rcmd2green160x80();
+  Rcmd3();
+
+  _screen_height = 160;
+  _screen_width = 80;
+  _colstart = 26;
+  _rowstart = 1;
+  _colorOrder = ST7735_MADCTL_BGR;
+  setRotation(0);
+
+  // not sure about this one
+  _tft_type = 1;
+}
+#endif
+
 // Generic PCB init function
 #if defined TFT_ENABLE_GENERIC
 void TFT_ST7735B_Initialize(){
@@ -702,30 +744,30 @@ void setRotation(uint8_t m) {
 
   switch (_rotation) {
   case 0:
-    madctl = ST7735_MADCTL_MX | ST7735_MADCTL_MY | ST7735_MADCTL_RGB;
-    _height = 160;
-    _width = 128;
+    madctl = ST7735_MADCTL_MX | ST7735_MADCTL_MY | _colorOrder;
+    _height = _screen_height;
+    _width = _screen_width;
     _xstart = _colstart;
     _ystart = _rowstart;
     break;
   case 1:
-    madctl = ST7735_MADCTL_MY | ST7735_MADCTL_MV | ST7735_MADCTL_RGB;
-    _width = 160;
-    _height = 128;
+    madctl = ST7735_MADCTL_MY | ST7735_MADCTL_MV | _colorOrder;
+    _width = _screen_height;
+    _height = _screen_width;
     _ystart = _colstart;
     _xstart = _rowstart;
     break;
   case 2:
-    madctl = ST7735_MADCTL_RGB;
-    _height = 160;
-    _width = 128;
+    madctl = _colorOrder;
+    _height = _screen_height;
+    _width = _screen_width;
     _xstart = _colstart;
     _ystart = _rowstart;
     break;
   case 3:
-    madctl = ST7735_MADCTL_MX | ST7735_MADCTL_MV | ST7735_MADCTL_RGB;
-    _width = 160;
-    _height = 128;
+    madctl = ST7735_MADCTL_MX | ST7735_MADCTL_MV | _colorOrder;
+    _width = _screen_height;
+    _height = _screen_width;
     _ystart = _colstart;
     _xstart = _rowstart;
     break;
